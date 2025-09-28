@@ -1,12 +1,12 @@
 # OllamaHost
 
-OllamaHost lets you run a local API server to expose your Ollama LLMs securely via a password-protected URL. No sign up or sign in required.
+OllamaHost lets you run a local API server to expose your Ollama LLMs securely via a **public, shareable URL**. It uses `ngrok` to create a secure tunnel to your local machine, so you can access your models from anywhere.
 
 ## Features
 - Runs locally on your computer.
-- Generates a secure password on first run.
-- Secures API access with the password in the URL.
-- Forwards requests to your local Ollama LLM.
+- **Generates a public, random URL** on every run.
+- Generates a secure password to protect your API.
+- Forwards requests from the public URL to your local Ollama LLM.
 
 ## Setup
 
@@ -14,31 +14,39 @@ OllamaHost lets you run a local API server to expose your Ollama LLMs securely v
     - Download and install Ollama from [ollama.com/download](https://ollama.com/download).
 
 2.  **Run the Start Script:**
-    - Simply run the `Start.py` script:
+    - Simply run the `Start.py` script in your terminal:
       ```bash
       python3 Start.py
       ```
-    - This script will automatically install the required dependencies and start the API server.
-    - On the first run, it will generate a `password.txt` file (this file is git-ignored for security).
+    - The script will automatically install the required dependencies (including `pyngrok`) and start the server.
 
 ## Usage
 
-1.  **Get Your Access URL:**
-    - When the server starts, it will display a message with your unique access URL, which includes the generated password.
-    - You can also find this URL by navigating to `http://localhost:8000` in your browser.
+1.  **Get Your Public Access URL:**
+    - After running the script, it will print a public URL to your console. It will look something like this:
+      ```
+      ✅ Your Ollama API is now publicly accessible!
+      ============================================================
+      Use this URL to send requests from anywhere:
 
-2.  **Send API Requests:**
-    - Use the provided access URL to send requests to the Ollama API. For example, to generate a response, send a POST request like this:
+      https://<random-string>.ngrok-free.app/proxy/api/generate?password=<your_password>
+      ```
+
+2.  **Send API Requests from Anywhere:**
+    - Use the generated URL to send requests to your Ollama API from any device with an internet connection.
       ```bash
-      curl -X POST http://localhost:8000/proxy/api/generate?password=<your_password> \
+      curl -X POST "https://<random-string>.ngrok-free.app/proxy/api/generate?password=<your_password>" \
            -H "Content-Type: application/json" \
            -d '{"model": "llama2", "prompt": "Hello!"}'
       ```
-    - Replace `<your_password>` with the password from your access URL.
+    - Replace the example URL with the one generated in your terminal.
+
+3.  **Stop the Server:**
+    - To stop the server and close the public connection, simply press `CTRL+C` in the terminal where the script is running.
 
 ## Security
-- The server is protected by a randomly generated password.
-- The `password.txt` file is added to `.gitignore` to prevent it from being committed to your repository. Keep this file safe.
+- Your API is protected by a randomly generated password.
+- The `password.txt` file is created locally for the script to use but is included in `.gitignore` to prevent it from being committed to your repository.
 
 ## License
 See LICENSE.
