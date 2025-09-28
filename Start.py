@@ -4,7 +4,7 @@ import os
 import time
 from pyngrok import ngrok
 
-PASSWORD_FILE = "password.txt"
+KEY_FILE = "key.txt"
 PORT = 8000
 
 def install_dependencies():
@@ -27,18 +27,18 @@ def start_local_server():
     )
     return server_process
 
-def get_password_from_file():
-    """Waits for password.txt to be created and returns the password."""
-    print("Waiting for server to generate password...")
+def get_key_from_file():
+    """Waits for key.txt to be created and returns the key."""
+    print("Waiting for server to generate key...")
     timeout = 20  # 20 seconds
     start_time = time.time()
-    while not os.path.exists(PASSWORD_FILE):
+    while not os.path.exists(KEY_FILE):
         time.sleep(1)
         if time.time() - start_time > timeout:
-            print("\nError: Timed out waiting for the password file.")
+            print("\nError: Timed out waiting for the key file.")
             print("The local server might have failed to start.")
             return None
-    with open(PASSWORD_FILE, "r") as f:
+    with open(KEY_FILE, "r") as f:
         return f.read().strip()
 
 def create_public_url():
@@ -63,8 +63,8 @@ if __name__ == "__main__":
 
     server_proc = start_local_server()
 
-    password = get_password_from_file()
-    if not password:
+    key = get_key_from_file()
+    if not key:
         server_proc.kill()
         sys.exit(1)
 
@@ -73,12 +73,12 @@ if __name__ == "__main__":
         server_proc.kill()
         sys.exit(1)
 
-    full_access_url = f"{public_url.public_url}/proxy/api/generate?password={password}"
-
     print("\n" + "="*60)
     print("✅ Your Ollama API is now publicly accessible!")
     print("="*60)
-    print(f"Use this URL to send requests from anywhere:\n\n{full_access_url}\n")
+    print(f"Public URL: {public_url.public_url}")
+    print(f"Master Key: {key}\n")
+    print("Refer to the README.md for API commands.")
     print("Keep this script running to maintain the connection.")
     print("Press CTRL+C to stop the server and close the public URL.")
 

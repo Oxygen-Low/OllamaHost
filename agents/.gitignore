@@ -1,0 +1,3 @@
+# Ignore all agent configuration and memory files
+*.json
+*.jsonl
