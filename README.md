@@ -1,3 +1,5 @@
+(this is made with google jules and ai because I have no idea how to use ollama.)
+
 # OllamaHost: Multi-Agent API Server
 
 OllamaHost has evolved! It's now a powerful multi-agent API server that lets you create, manage, and interact with multiple, stateful Ollama agents. Each agent has its own persistent conversation memory, allowing for complex, ongoing dialogues.
